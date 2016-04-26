@@ -14,7 +14,7 @@ inline std::istream & operator >> (std::istream & input, struct trans & tr) {
 	return input;
 }
 inline std::ostream & operator << (std::ostream & output, const struct trans & tr) {
-	output << tr.transId << ' ' << tr.buyClientId << ' ' << tr.sellClientId << ' ' << tr.transPrice << ' ' << tr.transShareCount;
+	output << tr.transId << '\t' << tr.buyClientId << '\t' << tr.sellClientId << '\t' << tr.transPrice << '\t' << tr.transShareCount;
 	return output;
 }
 #endif
