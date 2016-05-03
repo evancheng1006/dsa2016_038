@@ -196,22 +196,22 @@ inline void BidHeap::removeBuyByHeapIndex(unsigned int index) {
 
 	unsigned int curr = index;
 	while (curr < buy.size()) {
-		unsigned int smaller = curr;
+		unsigned int larger= curr;
 		if (curr * 2 < buy.size()) {
-			smaller = curr * 2;
+			larger = curr * 2;
 		}
 		if (curr * 2 + 1 < buy.size()) {
 			if (buy[curr * 2 + 1] > buy[curr * 2]) {
-				smaller = curr * 2 + 1;
+				larger = curr * 2 + 1;
 			}
 		}
-		if (buy[smaller] > buy[curr]) {
-			sellHeapIndex[buy[smaller].bidId] = curr;
-			sellHeapIndex[buy[curr].bidId] = smaller;
+		if (buy[larger] > buy[curr]) {
+			sellHeapIndex[buy[larger].bidId] = curr;
+			sellHeapIndex[buy[curr].bidId] = larger;
 			struct bid tmp = buy[curr];
-			buy[curr] = buy[smaller];
-			buy[smaller] = tmp;
-			curr = smaller;
+			buy[curr] = buy[larger];
+			buy[larger] = tmp;
+			curr = larger;
 		} else {
 			curr = buy.size();
 		}

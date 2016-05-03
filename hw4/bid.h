@@ -17,7 +17,7 @@ inline bool operator < (const struct bid & lhs, const struct bid & rhs) {
 	} else if (lhs.price > rhs.price) {
 		return false;
 	} else {
-		return (lhs.bidId < lhs.bidId);
+		return (lhs.bidId < rhs.bidId);
 	}
 	return false;
 }
@@ -28,7 +28,7 @@ inline bool operator > (const struct bid & lhs, const struct bid & rhs) {
 	} else if (lhs.price < rhs.price) {
 		return false;
 	} else {
-		return (lhs.bidId < lhs.bidId);
+		return (lhs.bidId < rhs.bidId);
 	}
 	return false;
 }
