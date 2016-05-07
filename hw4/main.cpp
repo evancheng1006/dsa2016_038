@@ -12,18 +12,23 @@ int main() {
 	struct bid tmpBid;
 	std::vector<struct trans> tmpTrans;
 	BidHeap bdh;
-//	int helppause;
 
 	while (std::cin >> tmpBid) {
+#if DEBUG == 1
+		std::cout << "input :" << tmpBid << "\n";
+#endif
 		bdh.insert(tmpBid);
-//		std::cout << "after insert\n";bdh.display(std::cout);std::cin >> helppause;
+#if DEBUG == 1
+		std::cout << "after insert\n";bdh.display(std::cout);
+#endif
 		transaction(bdh, tmpTrans);
-//		std::cout << "after transaction\n";bdh.display(std::cout);std::cin >> helppause;
+#if DEBUG == 1
+		std::cout << "after transaction\n";bdh.display(std::cout);
+#endif
 		for (unsigned int i = 0; i < tmpTrans.size(); i++) {
 			std::cout << tmpTrans[i] << "\n";
 		}
 	}
-//	bdh.display(std::cout);
 	return 0;
 }
 

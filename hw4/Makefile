@@ -3,8 +3,9 @@ CPP = g++
 INC = -I.
 STD = -std=c++98
 OPT = -O3
+DEBUGLEVEL = -DDEBUG=0
 OTHERFLAG = -Wall -Werror
-CFLAGS = $(INC) $(STD) $(OPT) $(OTHERFLAG)
+CFLAGS = $(INC) $(STD) $(DEBUGLEVEL) $(OPT) $(OTHERFLAG)
 # object that contain int main() is specified in $MAINOBJ.
 MAINOBJ = main.o
 OBJ = main.o transaction.o

@@ -38,6 +38,7 @@ public:
 	inline void removeByBidId(int bidId);
 	inline void display(std::ostream & output);
 
+	inline int whereIs(int bidId);
 };
 
 inline BidHeap::BidHeap() {
@@ -155,7 +156,11 @@ inline void BidHeap::removeSellByHeapIndex(unsigned int index) {
 		return;
 	}
 	sellHeapIndex[sell[index].bidId] = 0; // clear
+	sellHeapIndex.erase(sell[index].bidId);
 	sell[index] = sell.back();
+	if (sellHeapIndex.find(sell.back().bidId) != sellHeapIndex.end()) {
+		sellHeapIndex[sell.back().bidId] = index;
+	}
 	sell.pop_back();
 
 	unsigned int curr = index;
@@ -191,7 +196,11 @@ inline void BidHeap::removeBuyByHeapIndex(unsigned int index) {
 		return;
 	}
 	buyHeapIndex[buy[index].bidId] = 0; // clear
+	buyHeapIndex.erase(buy[index].bidId);
 	buy[index] = buy.back();
+	if (buyHeapIndex.find(buy.back().bidId) != buyHeapIndex.end()) {
+		buyHeapIndex[buy.back().bidId] = index;
+	}
 	buy.pop_back();
 
 	unsigned int curr = index;
@@ -206,8 +215,8 @@ inline void BidHeap::removeBuyByHeapIndex(unsigned int index) {
 			}
 		}
 		if (buy[larger] > buy[curr]) {
-			sellHeapIndex[buy[larger].bidId] = curr;
-			sellHeapIndex[buy[curr].bidId] = larger;
+			buyHeapIndex[buy[larger].bidId] = curr;
+			buyHeapIndex[buy[curr].bidId] = larger;
 			struct bid tmp = buy[curr];
 			buy[curr] = buy[larger];
 			buy[larger] = tmp;
@@ -226,13 +235,44 @@ inline void BidHeap::removeBuyByBidId(int bidId) {
 	removeBuyByHeapIndex(buyHeapIndex[bidId]);
 }
 inline void BidHeap::removeByBidId(int bidId) {
-	if (buyHeapIndex.find(bidId) != buyHeapIndex.end()) {
+	switch(whereIs(bidId)) {
+	case 0:
 		removeBuyByBidId(bidId);
-	}
-	if (sellHeapIndex.find(bidId) != sellHeapIndex.end()) {
+		break;
+	case 1:
 		removeSellByBidId(bidId);
+		break;
+	default:
+		break;
 	}
 	return;
+}
+inline int BidHeap::whereIs(int bidId) {
+	// 0: buy, 1: sell, -1, not found
+	// called by removebybidId
+#if DEBUG == 1
+	std::cout << "cancel bidId = " << bidId << "\n";
+#endif
+	if (buyHeapIndex.find(bidId) != buyHeapIndex.end()) {
+		if (buy[buyHeapIndex[bidId]].bidId == bidId) {
+#if DEBUG == 1
+			std::cout << "bidId " << bidId << "exist in buy\n";
+#endif
+			return 0;
+		}
+	}
+	if (sellHeapIndex.find(bidId) != sellHeapIndex.end()) {
+		if (sell[sellHeapIndex[bidId]].bidId == bidId) {
+#if DEBUG == 1
+			std::cout << "bidId " << bidId << "exist in sell\n";
+#endif
+			return 1;
+		}
+	}
+#if DEBUG == 1
+	std::cout << "not found\n";
+#endif
+	return -1;
 }
 
 inline void BidHeap::display(std::ostream & output) {
@@ -244,6 +284,15 @@ inline void BidHeap::display(std::ostream & output) {
 	for (unsigned int i = 1; i < buy.size(); i++) {
 		output << i << ": " << buy[i] << "\n";
 	}
+	output << "sellHeapIndex:\n";
+	for (std::map<int, int>::iterator it = sellHeapIndex.begin(); it!=sellHeapIndex.end(); it++) {
+		std::cout << it->first << " " << it->second << "\n";
+	}
+	output << "buyHeapIndex:\n";
+	for (std::map<int, int>::iterator it = buyHeapIndex.begin(); it!=buyHeapIndex.end(); it++) {
+		std::cout << it->first << " " << it->second << "\n";
+	}
+	output << "\n\n";
 	return;
 }
 

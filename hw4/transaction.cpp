@@ -13,14 +13,31 @@ void transaction(BidHeap & bdh, std::vector<struct trans> & result) {
 
 			struct bid bdMin = bdh.minSell();
 			struct bid bdMax = bdh.maxBuy();
+#if DEBUG == 1
+			std::cout << "!!!!!!!!!!!!\n";
+			bdh.display(std::cout);
+			std::cout << "!!!!!!!!!!!!\n";
+#endif
 			bdh.removeMinSell();
+#if DEBUG == 1
+			std::cout << "@@@@@@@@@@@@\n";
+			bdh.display(std::cout);
+			std::cout << "@@@@@@@@@@@@\n";
+#endif
 			bdh.removeMaxBuy();
+#if DEBUG == 1
+			std::cout << "############\n";
+			bdh.display(std::cout);
+			std::cout << "############\n";
+#endif
 			tmpTrans.transId = bdh.finishedTrans;
 			bdh.finishedTrans++;
 			tmpTrans.buyClientId = bdMax.clientId;
 			tmpTrans.sellClientId = bdMin.clientId;
 			tmpTrans.transPrice = bdMin.price; //seller's price
 			tmpTrans.transShareCount = ((bdMin.shareCount < bdMax.shareCount) ? bdMin.shareCount : bdMax.shareCount);
+
+
 			bdMin.shareCount -= tmpTrans.transShareCount;
 			bdMax.shareCount -= tmpTrans.transShareCount;
 			if (bdMin.shareCount != 0) {
@@ -31,6 +48,9 @@ void transaction(BidHeap & bdh, std::vector<struct trans> & result) {
 			}
 
 			result.push_back(tmpTrans);
+#if DEBUG == 1
+			bdh.display(std::cout);
+#endif
 		} else {
 			contLoop = 0;
 		}
