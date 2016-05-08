@@ -39,6 +39,7 @@ public:
 	inline void display(std::ostream & output);
 
 	inline int whereIs(int bidId);
+	inline int structureCheck();
 };
 
 inline BidHeap::BidHeap() {
@@ -162,8 +163,28 @@ inline void BidHeap::removeSellByHeapIndex(unsigned int index) {
 		sellHeapIndex[sell.back().bidId] = index;
 	}
 	sell.pop_back();
-
+	// upheap then downheap
+	// upheap
 	unsigned int curr = index;
+	int contUpHeap = 1;
+	while (contUpHeap) {
+		if (curr > 1) {
+			if (sell[curr] < sell[curr / 2]) {
+				sellHeapIndex[sell[curr / 2].bidId] = curr;
+				sellHeapIndex[sell[curr].bidId] = curr / 2;
+				struct bid tmp = sell[curr];
+				sell[curr] = sell[curr / 2];
+				sell[curr / 2] = tmp;
+				curr /= 2;
+			} else {
+				// no need to upheap
+				contUpHeap = 0;
+			}
+		} else {
+			contUpHeap = 0; // already root
+		}
+	}
+	// downheap
 	while (curr < sell.size()) {
 		unsigned int smaller = curr;
 		if (curr * 2 < sell.size()) {
@@ -202,8 +223,28 @@ inline void BidHeap::removeBuyByHeapIndex(unsigned int index) {
 		buyHeapIndex[buy.back().bidId] = index;
 	}
 	buy.pop_back();
-
+	// upheap then downheap
+	// upheap
 	unsigned int curr = index;
+	int contUpHeap = 1;
+	while (contUpHeap) {
+		if (curr > 1) {
+			if (buy[curr] > buy[curr / 2]) {
+				buyHeapIndex[buy[curr / 2].bidId] = curr;
+				buyHeapIndex[buy[curr].bidId] = curr / 2;
+				struct bid tmp = buy[curr];
+				buy[curr] = buy[curr / 2];
+				buy[curr / 2] = tmp;
+				curr /= 2;
+			} else {
+				// no need to upheap
+				contUpHeap = 0;
+			}
+		} else {
+			contUpHeap = 0; // already root
+		}
+	}
+	// downheap
 	while (curr < buy.size()) {
 		unsigned int larger= curr;
 		if (curr * 2 < buy.size()) {
@@ -294,6 +335,38 @@ inline void BidHeap::display(std::ostream & output) {
 	}
 	output << "\n\n";
 	return;
+}
+inline int BidHeap::structureCheck() {
+// 1: success
+	// buy
+	for (unsigned int i = 1; i < buy.size(); i++) {
+		if (i * 2 < buy.size()) {
+			if (buy[i * 2] > buy[i]) {
+				return 0;
+			}
+		}
+		if (i * 2 + 1 < buy.size()) {
+			if (buy[i * 2 + 1] > buy[i]) {
+				return 0;
+			}
+		}
+	}
+	// sell
+	for (unsigned int i = 1; i < sell.size(); i++) {
+		if (i * 2 < sell.size()) {
+			if (sell[i * 2] < sell[i]) {
+				return 0;
+			}
+		}
+		if (i * 2 + 1 < sell.size()) {
+			if (sell[i * 2 + 1] < sell[i]) {
+				return 0;
+			}
+		}
+	}
+
+	//
+	return 1;
 }
 
 #endif

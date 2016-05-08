@@ -14,6 +14,12 @@ int main() {
 	BidHeap bdh;
 
 	while (std::cin >> tmpBid) {
+#if DEBUG == 2
+		std::cout << "input :" << tmpBid << "\n";
+		if (!bdh.structureCheck()) {
+			std::cout << "structure fail\n";
+		}
+#endif
 #if DEBUG == 1
 		std::cout << "input :" << tmpBid << "\n";
 #endif
