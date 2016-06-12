@@ -1,0 +1,10 @@
+zzorn worldforge	2352
+zzounds coma	1200
+zzril delenit	33989
+zzxorcat utils	1229
+zzxorcopy utils	1229
+zzxordir utils	1229
+zzz extends	2766332391
+zzz is	1377
+zzz zzz	2821
+zzz zzzz	203590
